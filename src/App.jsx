@@ -27,7 +27,6 @@ const App = () => {
       <HeaderComponent />
       <Routes>
         <Route path="/" element={<LoginComponent />}></Route>
-
         <Route
           path="/todos"
           element={
@@ -36,7 +35,6 @@ const App = () => {
             </AuthenticatedRoute>
           }
         ></Route>
-
         <Route
           path="/add-todo"
           element={
@@ -54,7 +52,6 @@ const App = () => {
           }
         ></Route>
         <Route path="/register" element={<RegisterComponent />}></Route>
-
         <Route path="/login" element={<LoginComponent />}></Route>
         {/* Redirect to login if the route is not matched */}
         <Route path="*" element={<Navigate to="/" />} />

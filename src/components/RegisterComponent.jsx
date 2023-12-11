@@ -14,19 +14,12 @@ const RegisterComponent = () => {
     if (name || username || email || password) {
       try {
         const response = await registerUser(newUser);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
-        throw Error(error);
+        throw new Error(error);
       }
     }
   }
-
-  const isEmailValid = (input) => {
-    // Define a simple email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(input);
-  };
 
   return (
     <div className="container mt-5">
@@ -80,7 +73,6 @@ const RegisterComponent = () => {
                     placeholder="Enter email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
                     required
                   />
                 </div>
@@ -105,9 +97,7 @@ const RegisterComponent = () => {
                     className="btn btn-outline-primary w-100"
                     onClick={(e) => handleRegistrationForm(e)}
                     type="submit"
-                    disabled={
-                      !name || !username || !isEmailValid(email) || !password
-                    }
+                    disabled={!name || !username || !password}
                   >
                     Sign Up
                   </button>

@@ -46,7 +46,7 @@ public class TodoController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<TodoDto> updateTodoById(@RequestBody TodoDto todoDto, @PathVariable("id") Long id) {
-        return new ResponseEntity<>(todoService.updateTodoById(todoDto,id), HttpStatus.OK);
+        return new ResponseEntity<>(todoService.updateTodoById(todoDto, id), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")

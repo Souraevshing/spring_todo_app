@@ -1,26 +1,23 @@
 import axios from "axios";
 
-const BASE_URL = `${process.env.REACT_BASE_URL}/auth`;
+const BASE_URL = `${import.meta.env.VITE_BASE_URL}/auth`;
+const userToken = `${import.meta.env.VITE_USER_TOKEN}`;
+const userSession = `${import.meta.env.VITE_USER_SESSION_TOKEN}`;
 
-export const registerUser = (registerObj) =>
-  axios.post(`${BASE_URL}/register`, registerObj);
+export const registerUser = (user) => axios.post(`${BASE_URL}/register`, user);
 
 export const loginUser = (usernameOrEmail, password) =>
   axios.post(`${BASE_URL}/login`, { usernameOrEmail, password });
 
-export const storeToken = (token) =>
-  localStorage.setItem(`${process.env.REACT_USER_TOKEN}`, token);
+export const storeToken = (token) => localStorage.setItem(userToken, token);
 
-export const getToken = () =>
-  localStorage.getItem(`${process.env.REACT_USER_TOKEN}`);
+export const getToken = () => localStorage.getItem(userToken);
 
 export const saveLoggedInUser = (username) =>
-  sessionStorage.setItem(`${process.env.REACT_USER_SESSION_TOKEN}`, username);
+  sessionStorage.setItem(userSession, username);
 
 export const isUserLoggedIn = () => {
-  const username = sessionStorage.getItem(
-    `${process.env.REACT_USER_SESSION_TOKEN}`
-  );
+  const username = sessionStorage.getItem(userSession);
 
   if (username == null) {
     return false;
@@ -30,13 +27,11 @@ export const isUserLoggedIn = () => {
 };
 
 export const getLoggedInUser = () => {
-  const username = sessionStorage.getItem(
-    `${process.env.REACT_USER_SESSION_TOKEN}`
-  );
+  const username = sessionStorage.getItem(userSession);
   return username;
 };
 
 export const logout = () => {
-  localStorage.removeItem(`${process.env.REACT_USER_TOKEN}`);
-  sessionStorage.removeItem(`${process.env.REACT_USER_SESSION_TOKEN}`);
+  localStorage.removeItem(userToken);
+  sessionStorage.removeItem(userSession);
 };

@@ -1,9 +1,12 @@
 package com.todos.app.controller;
 
+import com.todos.app.dto.JwtTokenDto;
 import com.todos.app.dto.LoginDto;
 import com.todos.app.dto.RegisterDto;
 import com.todos.app.service.AuthService;
 import lombok.AllArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +28,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDto loginDto) {
-        return authService.loginUser(loginDto);
+    public ResponseEntity<JwtTokenDto> loginUser(@RequestBody LoginDto loginDto) {
+        JwtTokenDto response = authService.loginUser(loginDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

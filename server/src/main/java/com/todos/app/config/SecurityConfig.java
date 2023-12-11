@@ -1,24 +1,22 @@
 package com.todos.app.config;
 
-import com.todos.app.security.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
-
-import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.todos.app.security.JwtAuthenticationEntryPoint;
+import com.todos.app.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
@@ -26,6 +24,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private UserDetailsService userDetailsService;
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     // creating hashed password using bcrypt
     @Bean
@@ -44,19 +44,38 @@ public class SecurityConfig {
     // basic authentication secure rest apis
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+        // implement Basic Authentication
         httpSecurity
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers("/api/v1/todos/auth/**").permitAll();
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.anyRequest().authenticated();
-                })
-                // authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
-                // authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
-                // authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
-                // authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
-                .httpBasic(Customizer.withDefaults());
+                });
+
+        // removed basic auth and only use Bearer auth
+        // .httpBasic(Customizer.withDefaults());
+
+        // handle exception if JwtAuthenticationEntryPoint throws err
+        httpSecurity
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint));
+
+        // calling addFilterBefore() by passing JwtAuthenticationFilter class reference
+        // to make sure to execute this class code before SecurityConfig
+        // since JwtAuthenticationFilter contains logic to create jwt token and fetch
+        // username
+        httpSecurity
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return httpSecurity.build();
+
+        // authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
+        // authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
+        // authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
+        // authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
+
     }
 
     // in-memory authentication (database level authentication)

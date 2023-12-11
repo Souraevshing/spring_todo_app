@@ -13,7 +13,7 @@ const ListTodoComponent = () => {
 
   useEffect(() => {
     listTodos();
-  }, [todos]);
+  }, []);
 
   function listTodos() {
     getAllTodos()
@@ -45,7 +45,7 @@ const ListTodoComponent = () => {
 
   return (
     <div className="container">
-      <h2 className="text-center my-4">List of Todos</h2>
+      <h2 className="text-center my-4">TODOS</h2>
       <button className="btn btn-outline-dark w-100 mb-3" onClick={addNewTodo}>
         Add Todo
       </button>

@@ -49,7 +49,7 @@ const TodoComponent = () => {
           console.error(error);
         });
     }
-  }, [id]);
+  }, []);
 
   return (
     <div className="container mt-5">
@@ -112,7 +112,7 @@ const TodoComponent = () => {
                     onClick={(e) => saveOrUpdateTodo(e)}
                     disabled={!title || !description}
                   >
-                    Add Todo
+                    {id ? "Edit Todo" : "Add Todo"}
                   </button>
                 </div>
               </form>

@@ -17,25 +17,24 @@ const LoginComponent = () => {
     if (username || password) {
       try {
         const response = await loginUser(username, password);
-        const token = "Basic " + window.btoa(username + ":" + password);
 
-        storeToken(token);
-        saveLoggedInUser(username);
-        navigator("/todos");
+        //const token = "Basic " + window.btoa(username + ":" + password);
 
+        //create jwt token and pass it to response header
+        const _token = `Bearer ${response.data._token}`;
+
+        if (_token) {
+          storeToken(_token);
+          saveLoggedInUser(username);
+          navigator("/todos");
+        }
         window.location.reload(false);
       } catch (error) {
         console.log(error);
-        throw Error(err);
+        throw new Error(err);
       }
     }
   }
-
-  const isEmailValid = (input) => {
-    // Define a simple email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(input);
-  };
 
   return (
     <div className="container mt-5">
@@ -59,7 +58,6 @@ const LoginComponent = () => {
                     placeholder="Enter email"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
                     required
                   />
                 </div>
@@ -84,7 +82,7 @@ const LoginComponent = () => {
                     className="btn btn-outline-success w-100"
                     onClick={(e) => handleLoginForm(e)}
                     type="submit"
-                    disabled={!username || !isEmailValid(email) || !password}
+                    disabled={!username || !password}
                   >
                     Sign In
                   </button>
