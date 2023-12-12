@@ -21,6 +21,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -113,15 +114,7 @@ public class AuthServiceImpl implements AuthService {
             return jwtTokenDto;
 
         } catch (AuthenticationException e) {
-
-            System.out.println(e.getMessage());
-
-            JwtTokenDto jwtTokenDto = new JwtTokenDto();
-            jwtTokenDto.setJwtTokenType(null);
-            jwtTokenDto.set_token(null);
-            jwtTokenDto.setRole(null);
-
-            return jwtTokenDto;
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Login failed", e);
         }
 
     }

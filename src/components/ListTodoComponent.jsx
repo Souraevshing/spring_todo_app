@@ -5,6 +5,7 @@ import {
   getAllTodos,
   inCompleteTodo,
 } from "../services/TodoService";
+import { isAdminUser } from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
 const ListTodoComponent = () => {
@@ -46,11 +47,16 @@ const ListTodoComponent = () => {
   return (
     <div className="container">
       <h2 className="text-center my-4">TODOS</h2>
-      <button className="btn btn-outline-dark w-100 mb-3" onClick={addNewTodo}>
-        Add Todo
-      </button>
+      {isAdminUser() && (
+        <button
+          className="btn btn-outline-dark w-100 mb-3"
+          onClick={addNewTodo}
+        >
+          Add Todo
+        </button>
+      )}
       <div>
-        <table className="table table-bordered table-striped">
+        <table className="table table-responsive table-bordered table-striped">
           <thead className="table-dark">
             <tr>
               <th>Title</th>
@@ -66,18 +72,22 @@ const ListTodoComponent = () => {
                 <td>{todo.description}</td>
                 <td>{todo.completed ? "YES" : "NO"}</td>
                 <td>
-                  <button
-                    className="btn btn-outline-warning btn-sm"
-                    onClick={() => updateTodo(todo.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-outline-danger btn-sm ms-2"
-                    onClick={() => handleTodoAction(deleteTodo, todo.id)}
-                  >
-                    Delete
-                  </button>
+                  {isAdminUser() && (
+                    <button
+                      className="btn btn-outline-warning btn-sm"
+                      onClick={() => updateTodo(todo.id)}
+                    >
+                      Edit
+                    </button>
+                  )}
+                  {isAdminUser() && (
+                    <button
+                      className="btn btn-outline-danger btn-sm ms-2"
+                      onClick={() => handleTodoAction(deleteTodo, todo.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
                   <button
                     className={`btn btn-outline-${
                       todo.completed ? "secondary" : "success"

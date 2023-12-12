@@ -6,14 +6,15 @@ import { useNavigate } from "react-router-dom";
 const HeaderComponent = () => {
   const isAuth = isUserLoggedIn();
 
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   function handleLogout() {
     logout();
-    navigator("/login");
+    navigate("/login");
   }
 
-  return <header>
+  return (
+    <header>
       <nav className="navbar navbar-expand-md navbar-dark bg-dark">
         <div className="container">
           <a href="/" className="navbar-brand">
@@ -70,6 +71,7 @@ const HeaderComponent = () => {
         </div>
       </nav>
     </header>
+  );
 };
 
 export default HeaderComponent;

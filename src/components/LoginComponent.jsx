@@ -10,7 +10,7 @@ const LoginComponent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   async function handleLoginForm(e) {
     e.preventDefault();
@@ -22,12 +22,15 @@ const LoginComponent = () => {
 
         //create jwt token and pass it to response header
         const _token = `Bearer ${response.data._token}`;
+        //
+        const role = response.data.role;
 
-        if (_token) {
+        if (_token && role) {
           storeToken(_token);
-          saveLoggedInUser(username);
-          navigator("/todos");
+          saveLoggedInUser(username, role);
+          navigate("/todos");
         }
+
         window.location.reload(false);
       } catch (error) {
         console.log(error);
