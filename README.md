@@ -4,7 +4,7 @@
 
 ### For running the app on local machine
 
-#### Replace `.env.example` with the following :
+#### Create `.env.local` or `.env` or `.env*` with the following :
 
 #### For `VITE_BASE_URL` replace url with url after running `../spring_todo_app/server`
 
